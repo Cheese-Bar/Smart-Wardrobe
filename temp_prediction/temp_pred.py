@@ -90,7 +90,7 @@ model.compile(optimizer='adam',loss='mse')
 
 #模型保存的相关设置
 utils.plot_model(model)
-checkpoint_file='test_model.hdf5'
+checkpoint_file= 'test_model_gooood.hdf5'
 checkpoint_callback=ModelCheckpoint(filepath=checkpoint_file,monitor='loss',moode='min',save_best_only=True,save_weights_only=True)
 #模型训练
 history=model.fit(train_batch_dataset,epochs=30,validation_data=test_batch_dataset,callbacks=[checkpoint_callback])
