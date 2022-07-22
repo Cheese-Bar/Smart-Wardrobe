@@ -79,13 +79,16 @@ def pc_subscribe(queen):
 
 def pc_insert_data(queue,):
 	conn = sqlite3.connect('smart_wardrobe.db')
-	while True:
-		if queue.empty()==False:
-			temp_msg = queue.get()
-			time = temp_msg.split('|')[0]
-			key, value = temp_msg.split('|')[1].split(':')[0], temp_msg.split('|')[1].split(':')[1]
-			database_exe(conn, time, key, value)
-
+	try:
+		while True:
+			if queue.empty()==False:
+				temp_msg = queue.get()
+				rec_time = temp_msg.split('|')[0]
+				key, value = temp_msg.split('|')[1].split(':')[0], temp_msg.split('|')[1].split(':')[1]
+				database_exe(conn, rec_time, key, value)
+			time.sleep(1)
+	except KeyboardInterrupt:
+		print('Program terminated!')
 
 if __name__ == '__main__':
 	queue = Queue()
@@ -96,5 +99,5 @@ if __name__ == '__main__':
 		t2.start()
 		t1.join()
 		t2.join()
-	except:
-		print('End')
+	except KeyboardInterrupt:
+		print('Program terminated!')
