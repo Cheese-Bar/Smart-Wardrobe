@@ -18,7 +18,7 @@ def fog_publish(queue):
 	
     broker = 'broker.emqx.io'
     port = 1883
-    topic = "/sws3025/lecture07"
+    topic = "/SmartWardrobe/sensorData"
     client_id = f'python-mqtt-{random.randint(0, 10000)}'
     username = 'emqx'
     password = 'public'
@@ -34,20 +34,20 @@ def fog_publish(queue):
     
     msg_count = 0
     
-    while True:		
-        if queue.empty():
-            time.sleep(1)
-        else:
+    while True:
+        if queue.empty() == False:
             temp_msg = queue.get()
-        msg = 'messages: {}, {}: {}'.format(msg_count,temp_msg[0],temp_msg[1])
-        result = client.publish(topic, msg)
-        status = result[0]
-        
-        if status == 0:
-            print('Send {} to topic {}'.format(msg, topic))
-        else:
-            print('Failed to send message to topic {}'.format(topic))
-        msg_count += 1
+            # print(temp_msg)
+            msg = 'messages: {}, {}: {}'.format(msg_count,temp_msg[0],temp_msg[1])
+            result = client.publish(topic, msg)
+            status = result[0]
+            
+            if status == 0:
+                print('Send {} to topic {}'.format(msg, topic))
+            else:
+                print('Failed to send message to topic {}'.format(topic))
+            msg_count += 1
+            time.sleep(1)
 
 
 
@@ -62,7 +62,7 @@ def fog_recv_serial(queue):
 
             if len(smsg) > 0:
                 print('{}'.format(smsg))
-                queue.put(smsg.split(':')[0],smsg.split(':')[1])
+                queue.put((smsg.split(':')[0],smsg.split(':')[1]))
             time.sleep(1)
 
     except KeyboardInterrupt:
