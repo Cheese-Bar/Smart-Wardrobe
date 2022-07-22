@@ -1,5 +1,5 @@
 from pip import main
-import thread
+from threading import Thread
 import serial
 import time
 import random
@@ -72,8 +72,14 @@ def fog_recv_serial(queue):
 if __name__=='__main__':
     queue = Queue()
     try:
-        thread.start_new_thread(fog_publish, queue)
-        thread.start_new_thread(fog_recv_serial, queue)
+        t1 = Thread(target=fog_recv_serial, args=(queue, ))
+        t2 = Thread(target=fog_publish, args=(queue, ))
+
+        t1.start()
+        t2.start()
+
+        t1.join()  
+        t2.join()
     except:
         print('End')
 
