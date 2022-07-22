@@ -67,7 +67,7 @@ x=df[future]
 y=df['Temp']
 x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.7,shuffle=False,random_state=13)
 
-x_train.shape
+
 
 #取得训练集，和测试集的格式
 train_dataset,train_labels=multivariate_data(x_train,y_train,0,None,24,8,1,False)
