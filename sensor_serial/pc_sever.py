@@ -1,36 +1,45 @@
 
 import random
+import re
 import time
 import sqlite3
 
 from threading import Thread
+from tkinter.messagebox import NO
 
 import paho.mqtt.client as mqtt
 from queue import Queue
 
 def trans_key(key):
+	key = key.strip()
 	if key == 'Otemp': 
 		return 'outdoor', 'temp'
 	elif key == 'Ohumidity': 
 		return 'outdoor', 'humidity'
+	elif key == 'Opressure':
+		return 'outdoor', 'pressure'
 	elif key == 'Itemp': 
 		return 'indoor', 'temp'
 	elif key == 'Ihumidity': 
 		return 'indoor', 'humidity'
+	else:
+		print('Wrong key! :{}'.format(key))
+		return None, None
 
 def database_exe(conn, time, key, value):
 	flag, key = trans_key(key)
-	cur = conn.cursor()
-	sql = 'insert into {}(time, {}) values(?,?)'.format(flag, key) 
-	try:
-		cur.execute(sql,(time, value)) #插入一条数据
-		conn.commit()
-		print("插入数据成功")
-	except Exception as e:
-		print(e)
-		conn.rollback()
-		cur.close()
-		print("插入数据失败")
+	if flag != None:
+		cur = conn.cursor()
+		sql = 'insert into {}(time, {}) values(?,?)'.format(flag, key) 
+		try:
+			cur.execute(sql,(time, value)) #插入一条数据
+			conn.commit()
+			print("插入数据成功")
+		except Exception as e:
+			print(e)
+			conn.rollback()
+			cur.close()
+			print("插入数据失败")
 
 	 
 def on_connect(client, userdata, flags, rc):
@@ -68,26 +77,24 @@ def pc_subscribe(queen):
 	except KeyboardInterrupt:
 			print('Program terminated!')
 
-def pc_insert_data(queue,conn):
+def pc_insert_data(queue,):
+	conn = sqlite3.connect('smart_wardrobe.db')
 	while True:
 		if queue.empty()==False:
 			temp_msg = queue.get()
 			time = temp_msg.split('|')[0]
 			key, value = temp_msg.split('|')[1].split(':')[0], temp_msg.split('|')[1].split(':')[1]
-			database_exe(conn, flag, time, key, value)
+			database_exe(conn, time, key, value)
 
 
 if __name__ == '__main__':
-	conn = sqlite3.connect('smart_wardrobe.db')
 	queue = Queue()
-	# pc_subscribe(queue)
 	try:
 		t1 = Thread(target=pc_subscribe, args=(queue,))
-		t2 = Thread(target=pc_insert_data, args=(queue, conn))		
+		t2 = Thread(target=pc_insert_data, args=(queue,))		
 		t1.start()
 		t2.start()
 		t1.join()
 		t2.join()
 	except:
-		conn.close()
 		print('End')
