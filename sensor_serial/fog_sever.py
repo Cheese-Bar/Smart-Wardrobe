@@ -38,7 +38,7 @@ def fog_publish(queue):
         if queue.empty() == False:
             temp_msg = queue.get()
             # print(temp_msg)
-            msg = 'messages: {}, {}: {}'.format(msg_count,temp_msg[0],temp_msg[1])
+            msg = '{} | {}: {}'.format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),temp_msg[0],temp_msg[1])
             result = client.publish(topic, msg)
             status = result[0]
             
