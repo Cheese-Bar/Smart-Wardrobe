@@ -58,7 +58,7 @@ def fog_publish(queue):
             print('Failed to send message to topic {}'.format(topic))
         msg_count += 1
 
-        time.sleep(50)
+        time.sleep(60)
 
 
 

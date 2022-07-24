@@ -27,8 +27,8 @@ def trans_key(key):
 
 def database_exe(conn, data):
 	cur = conn.cursor()
-	sql1 = 'insert into indoor (time, temp, humidity) values(?,?)'
-	sql2 = 'insert into outdoor (time, temp, humidity, pressure) values(?,?,?)'
+	sql1 = 'insert into indoor (time, temp, humidity) values(?,?,?)'
+	sql2 = 'insert into outdoor (time, temp, humidity, pressure) values(?,?,?,?)'
 
 	try:
 		cur.execute(sql1,(data['time'], data['Itemp'], data['Ihumidity'])) #插入一条数据
