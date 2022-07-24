@@ -1,6 +1,6 @@
-from asyncio.windows_events import NULL
+
 import json
-from logging import NullHandler
+
 import serial
 import time
 import random
