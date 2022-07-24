@@ -1,8 +1,11 @@
 
+from configparser import InterpolationMissingOptionError
+import imp
 import random
 import re
 import time
 import sqlite3
+import json
 
 from threading import Thread
 from tkinter.messagebox import NO
@@ -26,20 +29,21 @@ def trans_key(key):
 		print('Wrong key! :{}'.format(key))
 		return None, None
 
-def database_exe(conn, time, key, value):
-	flag, key = trans_key(key)
-	if flag != None:
-		cur = conn.cursor()
-		sql = 'insert into {}(time, {}) values(?,?)'.format(flag, key) 
-		try:
-			cur.execute(sql,(time, value)) #插入一条数据
-			conn.commit()
-			print("插入数据成功")
-		except Exception as e:
-			print(e)
-			conn.rollback()
-			cur.close()
-			print("插入数据失败")
+def database_exe(conn, data):
+	cur = conn.cursor()
+	sql1 = 'insert into indoor (time, temp, humidity) values(?,?)'
+	sql2 = 'insert into outdoor (time, temp, humidity, pressure) values(?,?,?)'
+
+	try:
+		cur.execute(sql1,(data['time'], data['Itemp'], data['Ihumidity'])) #插入一条数据
+		cur.execute(sql2,(data['time'], data['Otemp'], data['Ohumidity'], data['Opressure']))
+		conn.commit()
+		print("插入数据成功")
+	except Exception as e:
+		print(e)
+		conn.rollback()
+		cur.close()
+		print("插入数据失败")
 
 	 
 def on_connect(client, userdata, flags, rc):
@@ -50,7 +54,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 	print('Received {} from {} topic'.format(msg.payload.decode(), msg.topic))
-	queue.put(msg.payload.decode())
+	queue.put(json.loads(msg.payload.decode()))
 
 def pc_subscribe(queen):
 	try:
@@ -82,10 +86,8 @@ def pc_insert_data(queue,):
 	try:
 		while True:
 			if queue.empty()==False:
-				temp_msg = queue.get()
-				rec_time = temp_msg.split('|')[0]
-				key, value = temp_msg.split('|')[1].split(':')[0], temp_msg.split('|')[1].split(':')[1]
-				database_exe(conn, rec_time, key, value)
+				t_msg = queue.get()
+				database_exe(conn, t_msg)
 			time.sleep(1)
 	except KeyboardInterrupt:
 		print('Program terminated!')

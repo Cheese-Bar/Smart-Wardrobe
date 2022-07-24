@@ -1,11 +1,11 @@
-from pip import main
-from threading import Thread
-
+import json
 import serial
 import time
 import random
 import paho.mqtt.client as mqtt
 from queue import Queue
+from pip import main
+from threading import Thread
 
 
 def on_connect(client, userdata, flags, rc):
@@ -35,19 +35,23 @@ def fog_publish(queue):
     msg_count = 0
     
     while True:
-        if queue.empty() == False:
+        msg = {}
+        msg['time'] = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+        while queue.empty() == False:
             temp_msg = queue.get()
-            # print(temp_msg)
-            msg = '{} | {}: {}'.format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),temp_msg[0],temp_msg[1])
-            result = client.publish(topic, msg)
-            status = result[0]
-            
-            if status == 0:
-                print('Send {} to topic {}'.format(msg, topic))
-            else:
-                print('Failed to send message to topic {}'.format(topic))
-            msg_count += 1
-            time.sleep(1)
+            msg[temp_msg[0]] = temp_msg[1]
+        
+        msg = json.dumps(msg)
+        result = client.publish(topic, msg)
+        status = result[0]
+
+        if status == 0:
+            print('Send {} to topic {}'.format(msg, topic))
+        else:
+            print('Failed to send message to topic {}'.format(topic))
+        msg_count += 1
+
+        time.sleep(50000)
 
 
 
