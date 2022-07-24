@@ -79,7 +79,7 @@ def pc_subscribe(queen):
 			print('Program terminated!')
 
 def pc_insert_data(queue,):
-	conn = sqlite3.connect('smart_wardrobe.db')
+	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	try:
 		while True:
 			if queue.empty()==False:
