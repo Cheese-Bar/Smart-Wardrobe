@@ -29,4 +29,9 @@ def logout_():
 	del session['user_info']
 	return redirect('login')
 
+@app.route('/getRealData')
+def getRealData():
+	
+
+
 app.run('0.0.0.0',9000)
