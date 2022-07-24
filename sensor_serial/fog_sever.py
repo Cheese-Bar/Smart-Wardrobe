@@ -37,12 +37,12 @@ def fog_publish(queue):
     msg_count = 0
     
     while True:
-        msg = {'time': None,
-                'Itemp': None,
-                'Ihumidity': None,
-                'Otemp': None,
-                'Ohumidity': None,
-                'Opressure': None}
+        msg = {'time': '',
+                'Itemp': '',
+                'Ihumidity': '',
+                'Otemp': '',
+                'Ohumidity': '',
+                'Opressure': ''}
         msg['time'] = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
         while queue.empty() == False:
             temp_msg = queue.get()

@@ -1,8 +1,4 @@
-
-from configparser import InterpolationMissingOptionError
-import imp
 import random
-import re
 import time
 import sqlite3
 import json
@@ -53,7 +49,7 @@ def on_connect(client, userdata, flags, rc):
 		print('Failed to connect, return code {:d}'.format(rc))
 
 def on_message(client, userdata, msg):
-	print('Received {} from {} topic'.format(msg.payload.decode(), msg.topic))
+	print('Received {} from {} topic'.format(json.loads(msg.payload.decode()), msg.topic))
 	queue.put(json.loads(msg.payload.decode()))
 
 def pc_subscribe(queen):
