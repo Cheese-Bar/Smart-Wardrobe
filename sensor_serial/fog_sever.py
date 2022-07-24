@@ -1,4 +1,6 @@
+from asyncio.windows_events import NULL
 import json
+from logging import NullHandler
 import serial
 import time
 import random
@@ -35,11 +37,16 @@ def fog_publish(queue):
     msg_count = 0
     
     while True:
-        msg = {}
+        msg = {'time': None,
+                'Itemp': None,
+                'Ihumidity': None,
+                'Otemp': None,
+                'Ohumidity': None,
+                'Opressure': None}
         msg['time'] = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
         while queue.empty() == False:
             temp_msg = queue.get()
-            msg[temp_msg[0]] = temp_msg[1]
+            msg[temp_msg[0].strip()] = temp_msg[1]
         
         msg = json.dumps(msg)
         result = client.publish(topic, msg)
