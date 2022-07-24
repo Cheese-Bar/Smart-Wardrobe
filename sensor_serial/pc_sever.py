@@ -72,7 +72,8 @@ def pc_subscribe(queen):
 		client.subscribe(topic)
 		client.on_message = on_message
 
-		client.loop_forever()				
+		client.loop_forever()		
+		# client.loop_start()		
 
 	except KeyboardInterrupt:
 			print('Program terminated!')
@@ -97,5 +98,5 @@ if __name__ == '__main__':
 		t2.start()
 		t1.join()
 		t2.join()
-	except KeyboardInterrupt:
+	except :
 		print('Program terminated!')
