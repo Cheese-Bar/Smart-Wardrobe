@@ -1,0 +1,22 @@
+.weather-page {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background-image: url(../..//images/ren.png);
+    background-size: cover;
+}
+
+.enter-city {
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.596);
+}
+
+.enter-city > h1 {
+    font-weight: 400;
+    font-size: 50px;
+}
+
+.enter-city > div > input {
+    font-size: 25px;
+    background-color: inherit;
+}

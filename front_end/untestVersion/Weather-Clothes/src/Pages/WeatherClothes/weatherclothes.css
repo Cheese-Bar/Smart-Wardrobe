@@ -1,0 +1,49 @@
+.day-page {
+    background-image: url(../../images/rack.png);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: -1;
+}
+
+.day-list{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.days {
+    opacity: 20%;
+    font-size: 20px;
+}
+
+.current-day {
+    opacity: 100%;
+    font-size: 20px;
+}
+
+#weather-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 20%;
+    /* z-index: 1; */
+}
+
+@media screen and (max-width: 540px) {
+    .day-page {
+        background-image: url(../../images/rack.png);
+        background-size: cover;
+        background-position: top left;
+    }
+}
