@@ -1,0 +1,52 @@
+.login {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-image: url(../../images/rack.png);
+}
+
+.login-container {
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    background-image: url("../../images/jean.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.login-container > button {
+    text-transform: inherit !important;
+    margin-top: 25px;
+    background-color:#fcf3ed;
+    z-index: 999;
+}
+
+#title {
+    font-size: 75px;
+}
+
+.login-container > p {
+    color: white;
+    position: relative;
+    z-index: 999;
+}
+
+/* For Mobile */
+@media screen and (max-width: 540px) {
+    .login {
+        background-image: url(../../images/rack.png);
+        background-size: cover;
+        background-position: top left;
+    }
+}
+
+/* For Tablets */
+/* @media screen and (min-width: 540px) and (max-width: 780px) {
+    .view {
+        width: 600px;
+    }
+} */
