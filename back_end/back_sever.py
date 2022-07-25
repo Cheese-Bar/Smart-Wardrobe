@@ -31,7 +31,29 @@ def logout_():
 
 @app.route('/getRealData')
 def getRealData():
-	
+	conn = sqlite3.connect('../database/smart_wardrobe.db')
+	cur = conn.cursor()
 
+	sql1 = '''select * from outdoor 
+	where temp not null and humidity not null and pressure not null 
+	order by id desc 
+	limit 1'''
+	result1 = cur.execute(sql1)
+	result1 = result1.fetchall()
 
-app.run('0.0.0.0',9000)
+	sql2 = '''select * from indoor 
+	where temp not null and humidity not null  
+	order by id desc 
+	limit 1'''
+	result2 = cur.execute(sql2)
+	result2 = result2.fetchall()
+
+	cur.close()
+	conn.close()
+	return 'outdoor:' + str(result1) + '\n' + 'indoor:' + str(result2)
+
+if __name__ == '__main__':
+	try:
+		app.run('0.0.0.0',9000)
+	except:
+		print('Program terminated!')
