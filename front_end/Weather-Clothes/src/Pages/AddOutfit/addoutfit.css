@@ -1,0 +1,58 @@
+.add-page {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+.clothing-inputs {
+    list-style-type: none;
+    /* text-align: center; */
+}
+
+input {
+    text-align: center;
+    border: none;
+    outline-width: 0;
+}
+
+#img-upload::-webkit-file-upload-button {
+        color: black;
+        display: inline-block;
+        background: #ffffff00;
+        border: none;
+        padding: 7px 15px;
+        border-radius: 3px;
+        white-space: nowrap;
+        cursor: pointer;
+}
+
+#img-upload {
+    background-color: inherit;
+}
+
+.fits {
+    margin: 25px;
+}
+
+.custom-select {
+    text-align-last: center;
+}
+
+.select-items {
+    position: absolute;
+    background-color: DodgerBlue;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
+#enter-fit {
+    font-weight: 400;
+    font-size: 50px;
+}
+
+#fit-input {
+    font-size: 25px;
+    background-color: inherit;
+}
