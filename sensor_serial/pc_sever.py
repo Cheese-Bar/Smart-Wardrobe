@@ -9,21 +9,21 @@ from tkinter.messagebox import NO
 import paho.mqtt.client as mqtt
 from queue import Queue
 
-def trans_key(key):
-	key = key.strip()
-	if key == 'Otemp': 
-		return 'outdoor', 'temp'
-	elif key == 'Ohumidity': 
-		return 'outdoor', 'humidity'
-	elif key == 'Opressure':
-		return 'outdoor', 'pressure'
-	elif key == 'Itemp': 
-		return 'indoor', 'temp'
-	elif key == 'Ihumidity': 
-		return 'indoor', 'humidity'
-	else:
-		print('Wrong key! :{}'.format(key))
-		return None, None
+# def trans_key(key):
+# 	key = key.strip()
+# 	if key == 'Otemp': 
+# 		return 'outdoor', 'temp'
+# 	elif key == 'Ohumidity': 
+# 		return 'outdoor', 'humidity'
+# 	elif key == 'Opressure':
+# 		return 'outdoor', 'pressure'
+# 	elif key == 'Itemp': 
+# 		return 'indoor', 'temp'
+# 	elif key == 'Ihumidity': 
+# 		return 'indoor', 'humidity'
+# 	else:
+# 		print('Wrong key! :{}'.format(key))
+# 		return None, None
 
 def database_exe(conn, data):
 	cur = conn.cursor()
