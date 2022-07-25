@@ -10,6 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score
 from tensorflow.keras import utils,losses,layers,Sequential
 from tensorflow.keras.callbacks import ModelCheckpoint,TensorBoard
+import sqlite3
 
 def multivariate_data(x,y, start_index, end_index, history_size,
                       target_size, step, single_step):
@@ -65,13 +66,13 @@ for col in future:
 
 x=df[future]
 y=df['Temp']
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.7,shuffle=False,random_state=13)
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,shuffle=False,random_state=13)
 
 
 
 #取得训练集，和测试集的格式
-train_dataset,train_labels=multivariate_data(x_train,y_train,0,None,24,8,1,False)
-test_dataset,test_labels=multivariate_data(x_test,y_test,0,None,24,8,1,False)
+train_dataset,train_labels=multivariate_data(x_train,y_train,0,None,24,1,1,False)
+test_dataset,test_labels=multivariate_data(x_test,y_test,0,None,24,1,1,False)
 
 train_batch_dataset=create_batch_dataset(train_dataset,train_labels)
 test_batch_dataset=create_batch_dataset(test_dataset,test_labels,train=False)
