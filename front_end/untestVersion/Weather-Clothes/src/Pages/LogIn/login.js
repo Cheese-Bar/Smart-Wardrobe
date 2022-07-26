@@ -63,7 +63,7 @@ const LogIn = () => {
         //     window.location.href='/addOutfit';
         // }
 
-        Axios.post("http://localhost:3000/signIn",{name: name,pwd: password})
+        Axios.post("http://10.15.198.144:9000/login",{name: name,pwd: password})
             .then(function (response) {
             console.log(response);
             history.push("/login");
@@ -73,20 +73,20 @@ const LogIn = () => {
                 window.alert("Name or Password Error!");
             });
 
-        // auth
-        // .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        // .then(() => {
-        //
-        //     auth.signInWithPopup(provider)
-        //     .then(result => {
-        //     dispatch({
-        //         type: actionTypes.SET_USER,
-        //         user: result.user
-        //     })
-        // })
-        // .catch(err => console.log(err.message))
-        //
-        // })
+        auth
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+
+            auth.signInWithPopup(provider)
+            .then(result => {
+            dispatch({
+                type: actionTypes.SET_USER,
+                user: result.user
+            })
+        })
+        .catch(err => console.log(err.message))
+
+        })
 
     };
 

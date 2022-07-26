@@ -47,7 +47,7 @@ const W3 = () => {
     })
 
     const chartDom = document.getElementById('chart');
-    const myChart = echarts.init(chartDom);
+    // const myChart = echarts.init(chartDom);
     var option;
 
     option = {
@@ -124,7 +124,7 @@ const W3 = () => {
         ]
     };
 
-    option && myChart.setOption(option);
+    // option && myChart.setOption(option);
 
 
     return(

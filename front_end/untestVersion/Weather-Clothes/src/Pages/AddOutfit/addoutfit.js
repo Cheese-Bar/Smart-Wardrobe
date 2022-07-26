@@ -30,32 +30,33 @@ const AddOutfit = () => {
 
     },[setBck])
 
+    // TODO: 改上传图片方法
     const handleImgUpload = (event) => {
 
-        event.preventDefault()
-
-        // Upload image to firestore and store in variable
-        const uploadTask = storage.ref(`images/${fitImage.name}`).put(fitImage);
-
-        // Get url of image just uploaded to firestore storage
-        uploadTask.on(
-            "state_changed",
-            snapshot => {},
-            error => {
-                console.log(error)
-            },
-            () => {
-                storage
-                .ref("images")
-                .child(fitImage.name)
-                .getDownloadURL()
-                .then(url =>
-                    setImgUrl(url)
-                )
-            }
-        )
-        setInfoPop("block");
-        setInfoContent("img")
+        // event.preventDefault()
+        //
+        // // Upload image to firestore and store in variable
+        // // const uploadTask = storage.ref(`images/${fitImage.name}`).put(fitImage);
+        //
+        // // Get url of image just uploaded to firestore storage
+        // uploadTask.on(
+        //     "state_changed",
+        //     snapshot => {},
+        //     error => {
+        //         console.log(error)
+        //     },
+        //     () => {
+        //         storage
+        //         .ref("images")
+        //         .child(fitImage.name)
+        //         .getDownloadURL()
+        //         .then(url =>
+        //             setImgUrl(url)
+        //         )
+        //     }
+        // )
+        // setInfoPop("block");
+        // setInfoContent("img")
 
     };
 
