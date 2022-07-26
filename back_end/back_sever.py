@@ -130,7 +130,6 @@ def getHistory():
 
 @app.route('/uploadImage', methods=['POST'])
 def uploadImg():
-
 	name = request.form.get('name')
 	img = request.files.get('upload')
 	print({'smfile':img})
@@ -169,10 +168,12 @@ def getAll():
     """
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
-	sql = '''select name, url from images'''
+	sql = '''select id, name, url from images'''
 	result = cur.execute(sql).fetchall()
-	result = {'all': result}
-	return json.dumps(result)
+	re = {'all':[]}
+	for item in result:
+		re['all'].append({'id': item[0],'name':item[1], 'url':item[2]})
+	return json.dumps(re)
 
 @app.route('/getBestFit')
 def getBest():
@@ -214,8 +215,26 @@ def getBest():
 	if result: 
 		re = {'bestfit': result[random.randint(0,len(result)-1)]}
 		return json.dumps(re)
-	return 'Error'
+	return '当前没有合适的衣服捏， 快去添加新衣服叭~'
 
+@app.route('/deleteImage/<id>')
+def delImag(id):
+	conn = sqlite3.connect('../database/smart_wardrobe.db')
+	cur = conn.cursor()
+	sql = '''delete from images 
+	where id = ?'''
+	try:
+		cur.execute(sql,(id,))
+		conn.commit()
+		cur.close()
+		conn.close()
+		return '删除成功'
+	except Exception as e:
+		print(e)
+		conn.rollback()
+		cur.close()
+		conn.close()
+		return '删除失败'
 	
 if __name__ == '__main__':
 	# upload({'smfile': open('../images/mianao2.jpg', 'rb')})
