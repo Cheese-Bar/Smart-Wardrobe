@@ -1,4 +1,5 @@
 import json
+from unittest import result
 from flask import Flask, request,  redirect, render_template,session
 import sqlite3
 from flasgger import Swagger
@@ -83,7 +84,7 @@ def getRealData():
 
 	cur.close()
 	conn.close()
-
+	
 	res = {'outdoor':{}, 'indoor':{}}
 	res['outdoor']['time'] = result1[0][0]
 	res['outdoor']['temp'] = result1[0][1]
@@ -92,6 +93,7 @@ def getRealData():
 	res['indoor']['time'] = result2[0][0]
 	res['indoor']['temp'] = result2[0][1]
 	res['indoor']['humidity'] = result2[0][2]
+	res['statu'] = 'success'
 
 	return json.dumps(res)
 
@@ -129,6 +131,7 @@ def getHistory():
 	re = {'temp_list': temp_list,
 			'humi_list': humi_list,
 			'pres_list': pres_list}
+	re['statu'] = 'success'
 	return json.dumps(re)
 
 @app.route('/uploadImage', methods=['POST'])
@@ -174,9 +177,13 @@ def getAll():
 	cur = conn.cursor()
 	sql = '''select id, name, url from images'''
 	result = cur.execute(sql).fetchall()
-	re = {'all':[]}
-	for item in result:
-		re['all'].append({'id': item[0],'name':item[1], 'url':item[2]})
+	re = {'statu':'','all':[]}
+	if result:
+		for item in result:
+			re['all'].append({'id': item[0],'name':item[1], 'url':item[2]})
+		re['statu'] = 'success'
+	else:
+		re['statu'] = 'fail'
 	return json.dumps(re)
 
 @app.route('/getBestFit')
@@ -193,22 +200,33 @@ def getBest():
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
 	# TODO: 获得预测的温度
-	sql = '''select temp
-				from (
+	# sql = '''select temp
+	# 			from (
+	# 				select *
+	# 				from outdoor
+	# 				where temp is not null
+	# 				order by time desc
+	# 				limit 24)
+	# 			order by time'''
+	# temp_list = cur.execute(sql).fetchall()
+	# temp_list = np.array(temp_list)[:,0]
+	sql = '''select time, temp, humidity, pressure
+			from (
 					select *
 					from outdoor
-					where temp is not null
+					where temp and humidity and pressure is not null
 					order by time desc
-					limit 24)
-				order by time'''
-	temp_list = cur.execute(sql).fetchall()
-	temp_list = np.array(temp_list)[:,0]
-	print(temp_list)
-	p_temp = predict_temp(temp_list)
+					limit 24
+				)
+			order by time'''
+
+	history = cur.execute(sql).fetchall()
+	p_temp = predict_temp(history)
 	print(p_temp)
 	# TODO: 根据温度-衣服模型获得合适的type
 	c_type = temp_to_cloth(p_temp)
 	# TODO: 根据type 挑选一件合适的衣服
+	print(p_temp)
 
 	sql = '''select name, url from images
 	where type = ?'''
