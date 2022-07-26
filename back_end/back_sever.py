@@ -7,7 +7,7 @@ from flask_cors import CORS, cross_origin #导入包
 import requests
 import random
 import numpy as np
-from predict import predict_temp, temp_to_cloth
+from predict import predict_temp, temp_to_cloth, cloth_recognition
 
 app = Flask(__name__)
 Swagger(app)
@@ -20,7 +20,6 @@ def upload(img):
 	try:
 		headers = {'Authorization': 'NOCejrcI6d8eJNtWDShKuNDAcXlJ4gFV'}
 		url = 'https://sm.ms/api/v2/upload'
-		print(img)
 		res = requests.post(url, files=img, headers=headers).json()
 		print(res)
 		res = res['data']['url']
@@ -138,13 +137,15 @@ def getHistory():
 def uploadImg():
 	name = request.form.get('name')
 	img = request.files.get('upload')
-	print('log',{'smfile':img})
+	img = img.read()
+	# print('log',{'smfile':img})
 	url = upload({'smfile':img})
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
 
 	cloth_type = 0
 	# TODO: 需要添加识别
+	cloth_type = cloth_recognition(img)
 
 	try:
 		sql = '''insert into images (name, url, type) values(?,?,?)'''

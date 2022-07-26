@@ -3,6 +3,11 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 import pickle
+import PIL
+import PIL.ImageOps
+from PIL import Image
+from io import BytesIO
+from werkzeug.datastructures import FileStorage
 from sklearn.preprocessing import MinMaxScaler
 
 def predict_temp(data):
@@ -27,6 +32,7 @@ def predict_temp(data):
     # print(x,x.shape)
 
     pred = final_model.predict(x)
+    pred = scaler.inverse_transform(pred)
     print('预测温度',pred)
     return pred
 
@@ -35,5 +41,32 @@ def temp_to_cloth(temp):
         model = pickle.load(f)
         c_type = model.predict([[temp]])
         print(c_type)
-    return c_type
+    return newindex(c_type)
 
+def newindex(n):
+	if n == 0:
+		return "a T-SHIRT/TOP"
+	elif n == 1:
+		return "shirt"
+	elif n == 3:
+		return "a PULLOVER"
+	elif n == 4:
+		return "a COAT"
+	else:
+		return "Unknown"
+
+def cloth_recognition(imgArray):
+    # BytesIO(imgArray).save('./temp')
+    # img = open('./temp','rb')
+    img = PIL.Image.open(BytesIO(imgArray)).convert("L")
+    # img = PIL.Image.open("img/" + 'pullover.jpg').convert("L")
+    img = img.resize((28, 28), Image.ANTIALIAS)
+    img = PIL.ImageOps.invert(img)
+    img = np.array(img)
+
+
+    img = np.array(img).reshape(1,28,28,1)
+    new_model = tf.keras.models.load_model("./model/smartwardrobe2.model".encode("utf-8"))
+    prediction = new_model.predict(img)
+    print(prediction)
+    return newindex(np.argmax(prediction))
