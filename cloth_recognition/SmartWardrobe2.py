@@ -35,6 +35,19 @@ def imageIndex(n):
 		return "ANKLE BOOTS"
 	else:
 		return "an unknown object"
+
+def newindex(n):
+	if n == 0:
+		return "a T-SHIRT/TOP"
+	elif n == 1:
+		return "shirt"
+	elif n == 3:
+		return "a PULLOVER"
+	elif n == 4:
+		return "a COAT"
+	else:
+		return "Unknown"
+
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -48,6 +61,25 @@ while 1:
 		x_train, y_train = loadlocal_mnist(
 		images_path = "train-images-idx3-ubyte",
 		labels_path = "train-labels-idx1-ubyte")
+
+		# new add
+		X = []
+		Y = []
+		for i in range(len(x_train)):
+			if y_train[i] ==0:
+				X.append(x_train[i])
+				Y.append(0)#duanxiu
+			elif y_train[i]==2:
+				X.append(x_train[i])
+				Y.append(3)#maoyi
+			elif y_train[i]==4:
+				X.append(x_train[i])
+				Y.append(4)#dayi
+			elif y_train[i]==6:
+				X.append(x_train[i])
+				Y.append(1)#changxiu
+		x_train=X
+		y_train=Y
 		
 		x_train = tf.keras.utils.normalize(x_train, axis = 1)
 		x_train=x_train.reshape(60000,28,28,1)
@@ -111,7 +143,7 @@ while 1:
 		iter = 0
 		#sys.stdout = sys.__stdout__
 		while iter < cnt:
-			print("\n" + str(iter + 1) + "). " + imgNames[iter] + " is an image of " + imageIndex(np.argmax(predictions[iter])))
+			print("\n" + str(iter + 1) + "). " + imgNames[iter] + " is an image of " + newindex(np.argmax(predictions[iter])))
 			iter+=1
 		#sys.stdout = open(os.devnull, "w")
 	elif command_list[0] == "display":
