@@ -5,15 +5,13 @@ import { IconButton, Avatar } from "@material-ui/core";
 import { useStateValue } from "../../utils/stateProvider";
 import { useHistory } from "react-router-dom";
 // import moment from "moment";
-import { auth } from "../../utils/firebase";
-import { Button } from "@material-ui/core";
-import API from "../../utils/API";
-import db from "../../utils/firebase";
 import temp from "../../images/temp.png";
 import info from "../../images/info.png";
 import { UserContext } from "../../utils/UserContext";
 import Axios from "axios";
 import Login from "../../Pages/LogIn/login";
+import server from "../../server";
+import Wardrobe from "../../Pages/Wardrobe/wardrobe";
 
 const Navbar = () => {
 
@@ -24,14 +22,16 @@ const Navbar = () => {
     // Determine annimation
     const [fadeIn, setFadeIn] = useState(0);
     const history = useHistory();
-    const [todaysTemp, setTodaysTemp] = useState();
+    const [InTemp, setInTemp] = useState();
     const {setInfoPop, setInfoContent} = useContext(UserContext);
 
     useEffect(() => {
 
         // Get today current temperature data
-        setTodaysTemp(Axios.get("http://localhost:3000/TodayTemp"));
-
+        Axios.get('http://'+server+':9000/getRealData').then(function (res) {
+            setInTemp(res.data.indoor.temp);
+            console.log(InTemp);
+        })
     },[])
     
     // Toggle Our Navigation Bar
@@ -75,10 +75,6 @@ const Navbar = () => {
     };
 
 
-    // const signOut = () => {
-    //     history.push("/login")
-    // };
-
     return(
         <header>
 
@@ -92,9 +88,9 @@ const Navbar = () => {
                         {
                             (()=> {
 
-                                if (typeof todaysTemp === "number") {
+                                if (typeof InTemp === "number") {
     
-                                    const temperature = todaysTemp + " °C";
+                                    const temperature = "Wardrobe" + InTemp + " °C";
     
                                     return (
                                         <>

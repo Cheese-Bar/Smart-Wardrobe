@@ -16,51 +16,73 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/swiper.scss';
 import SwiperCore, {Navigation} from 'swiper/core';
 import "swiper/components/navigation/navigation.min.css"
+import Axios from "axios";
+import server from "../../server";
 // // install Swiper modules
 SwiperCore.use([Navigation]);
 
 const W2 = () => {
 
     // Get loggedin user info
+    let index = 0;
     const [{ user }] = useStateValue();
-    const [outfits, setOutfits] = useState();
+    const [noFits, setNoFits] = useState();
+    // const [outfits, setOutfits] = useState();
     const history = useHistory();
     const {setBck} = useContext(UserContext);
 
+    var outfits = []
+
     // Get outfits
-    // useEffect(() => {
-    //
-    //     setBck(`url(${garmetsBck})`);
-    //
-    //     db
-    //     .collection("wardrobe")
-    //     .where('uid', '==', user.uid)
-    //     .onSnapshot(snapshot => setOutfits(snapshot.docs.map((doc) => doc)))
-    //
-    // //eslint-disable-next-line
-    // },[]);
+    useEffect(() => {
+
+        Axios.get("http://"+server+":9000/getAll").then(function (res) {
+            if(res.data.statu === "success"){
+                if(res.data.All.length === 0){
+                    setNoFits(true);
+                    console.log(res.data.All);
+                }else {
+                    setNoFits(false);
+                    outfits = res.data.All;
+                    console.log(res.data.All);
+                }
+            }else{
+                window.confirm("Get data failed! ")
+            }
+        }).catch(function (error){
+            window.confirm("error!");
+        })
+    //eslint-disable-next-line
+    },[index]);
+
+
+    // const createSlide = (doc) =>{
+    //     return (
+    //         < SwiperSlide className="swiper-slide" key={doc.id}>
+    //         <h1 id="fit-name">{doc.name}</h1>
+    //         <IconButton key={doc.id} onClick={() => removeFit(doc.id)}>
+    //             <img src={hanger} alt="hanger" width="25" height="25" id="hang"/>
+    //         </IconButton>
+    //         <img src={doc.url} alt="outfit" id="fit-pic"/>
+    //         </SwiperSlide>
+    //     )
+    // }
 
     //remove cloth
-    const removeFit = (theDoc) => {
-
-      let confirmDl = window.confirm("delete?")
-
-        if (confirmDl) {
-            db
-            .collection("wardrobe")
-            .doc(theDoc)
-            .delete()
-            .then(() => {
-                console.log("Document successfully deleted!");
-                
-            }).catch((error) => {
-                console.error("Error removing document: ", error);
-            });
+    const removeFit = (id) => {
+        let confirmDl = window.confirm("delete?")
+        if (confirmDl){
+            Axios.get("http://"+server+"9000/deleteImage/"+id)
+                .then(function (res){
+                    if(res.data.statu === "success"){
+                        index = id;
+                    }else{
+                        window.confirm("remove failed!")
+                    }
+                }).catch(function (error) {
+                window.confirm("error!");
+            })
         }
-        else {
-            console.log("good save")
-        }
-
     };
 
     // retreive slide # var from css
@@ -69,25 +91,18 @@ const W2 = () => {
     return(
         <div className="wardrobe-page">
             <Swiper navigation={true} spaceBetween={50} slidesPerView={num} onSlideChange={() => console.log('slide change')} className="mySwiper">
-
-
                         {
-                        outfits ? 
-                            outfits.map(doc => 
+                            outfits.map((outfits) =>
+                                (<SwiperSlide  className="swiper-slide" key={outfits.id}>
+                                    <h1 id="fit-name">{outfits.name}</h1>
+                                    <IconButton key={outfits.id} onClick={() => removeFit(outfits.id)}>
 
-                                <SwiperSlide  className="swiper-slide" key={doc.id}>
-                                    <h1 id="fit-name">{doc.data().outfit}</h1>
-                                    <IconButton key={doc.id} onClick={() => removeFit(doc.id)}>
-                    
                                         <img src={hanger} alt="hanger" width="25" height="25" id="hang"/>
                                     </IconButton>
-                                    
-                                    <img src={doc.data().image} alt="outfit" id="fit-pic"/> 
-                                </SwiperSlide>
 
-                        ) 
-                        : 
-                        <p>Add outfits</p>
+                                    <img src={outfits.url} alt="outfit" id="fit-pic"/>
+                                </SwiperSlide>)
+                            )
                         }
 
             </Swiper>
