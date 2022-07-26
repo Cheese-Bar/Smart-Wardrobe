@@ -15,11 +15,9 @@ while True:
     try:
         button.wait_for_press()
         sleep(5)
-        fig = camera.capture('./temp_imgs/frame%03d.jpg' % frame)
-    
-        img_str = {'upload':fig}
-        print(img_str)
-        res=requests.request("POST",'http://10.24.239.172:9000/uploadImage',data={'name':'frame%03d.jpg' % frame}, files=img_str)
+        camera.capture('./temp_imgs/frame%03d.jpg' % frame)
+        img_str = {'upload':open('./temp_imgs/frame%03d.jpg' % frame, 'rb')}
+        res=requests.request("POST",'http://192.168.155.197:9000/uploadImage',data={'name':'frame%03d.jpg' % frame}, files=img_str)
 
         frame += 1
     except KeyboardInterrupt:
