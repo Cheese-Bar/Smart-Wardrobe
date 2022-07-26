@@ -22,8 +22,11 @@ def upload(img):
 		print(img)
 		res = requests.post(url, files=img, headers=headers).json()
 		print(res)
-		return res['data']['url']
+		res = res['data']['url']
+		print('上传图床成功, URL:'+res)
+		return res
 	except Exception as e:
+		print('上传图床失败')
 		print(e)
 		return res['images']
 
@@ -147,13 +150,14 @@ def uploadImg():
 		print("插入图片成功")
 		cur.close()
 		conn.close()
-		return json.dumps({'statu': 'success'})
+		return json.dumps({'statu': 'success','msg':'图片已录入数据库'})
 	except Exception as e:
 		print(e)
 		conn.rollback()
 		cur.close()
 		conn.close()
-		return json.dumps({'statu': 'fail'})
+		print("图片插入数据库失败,请检查是否重名")
+		return json.dumps({'statu': 'fail','msg':'名称已经存在'})
 
 @app.route('/getAll')
 def getAll():
