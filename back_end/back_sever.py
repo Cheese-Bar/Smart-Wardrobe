@@ -6,6 +6,7 @@ from flask_cors import CORS, cross_origin #导入包
 import requests
 import random
 import numpy as np
+from predict import predict_temp, temp_to_cloth
 
 app = Flask(__name__)
 Swagger(app)
@@ -184,12 +185,26 @@ def getBest():
       200:
         description: 得到推荐的衣物 {bestfit:[name,url]}
     """
-	# TODO: 获得预测的温度
-	# TODO: 根据温度-衣服模型获得合适的type
-	# TODO: 根据type 挑选一件合适的衣服
-	c_type = 0
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
+	# TODO: 获得预测的温度
+	sql = '''select temp
+				from (
+					select *
+					from outdoor
+					where temp is not null
+					order by time desc
+					limit 24)
+				order by time'''
+	temp_list = cur.execute(sql).fetchall()
+	temp_list = np.array(temp_list)[:,0]
+	print(temp_list)
+	p_temp = predict_temp(temp_list)
+	print(p_temp)
+	# TODO: 根据温度-衣服模型获得合适的type
+	c_type = temp_to_cloth(p_temp)
+	# TODO: 根据type 挑选一件合适的衣服
+
 	sql = '''select name, url from images
 	where type = ?'''
 	result = cur.execute(sql, (c_type,)).fetchall()

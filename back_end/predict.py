@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 def predict_temp(data):
-    final_model = tf.keras.models.load_model("test_model.hdf5",compile=True)
+    final_model = tf.keras.models.load_model("./model/test_model.hdf5",compile=True)
     pred = final_model.predict(data)
     return pred
 
