@@ -147,13 +147,13 @@ def uploadImg():
 		print("插入图片成功")
 		cur.close()
 		conn.close()
-		return "插入图片成功"
+		return json.dumps({'statu': 'success'})
 	except Exception as e:
 		print(e)
 		conn.rollback()
 		cur.close()
 		conn.close()
-		return "存在同名衣服或其他错误"
+		return json.dumps({'statu': 'fail'})
 
 @app.route('/getAll')
 def getAll():
@@ -228,13 +228,13 @@ def delImag(id):
 		conn.commit()
 		cur.close()
 		conn.close()
-		return '删除成功'
+		return json.dumps({'statu': 'success', 'message':'删除成功'})
 	except Exception as e:
 		print(e)
 		conn.rollback()
 		cur.close()
 		conn.close()
-		return '删除失败'
+		return json.dumps({'statu': 'success', 'message':'删除失败'})
 	
 if __name__ == '__main__':
 	# upload({'smfile': open('../images/mianao2.jpg', 'rb')})
