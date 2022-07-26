@@ -28,17 +28,17 @@ const W2 = () => {
     const {setBck} = useContext(UserContext);
 
     // Get outfits
-    useEffect(() => {
-
-        setBck(`url(${garmetsBck})`);
-        
-        db
-        .collection("wardrobe")
-        .where('uid', '==', user.uid)
-        .onSnapshot(snapshot => setOutfits(snapshot.docs.map((doc) => doc)))
-
-    //eslint-disable-next-line
-    },[]);
+    // useEffect(() => {
+    //
+    //     setBck(`url(${garmetsBck})`);
+    //
+    //     db
+    //     .collection("wardrobe")
+    //     .where('uid', '==', user.uid)
+    //     .onSnapshot(snapshot => setOutfits(snapshot.docs.map((doc) => doc)))
+    //
+    // //eslint-disable-next-line
+    // },[]);
 
     //remove cloth
     const removeFit = (theDoc) => {

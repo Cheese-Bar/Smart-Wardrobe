@@ -75,9 +75,9 @@ const Navbar = () => {
     };
 
 
-    const signOut = () => {
-        history.push("/login")
-    };
+    // const signOut = () => {
+    //     history.push("/login")
+    // };
 
     return(
         <header>
@@ -117,12 +117,12 @@ const Navbar = () => {
 
                 <ul className={`nav-links ${navActive === "true" ? "nav-active" : ""}`} fadein={fadeIn} onAnimationEnd={() => {setFadeIn(0)}}>
                     
-                    <li><Avatar src={user.photoURL}/></li>
+                    {/*<li><Avatar src={user.photoURL}/></li>*/}
                     <li onClick={() => linkAction("/weather")}>Weather</li>
                     <li onClick={() => linkAction("/wardrobe")}>Wardrobe</li>
                     <li onClick={() => linkAction("/")}>Today's Outfit</li>
                     <li className="how" onClick={() => {setInfoPop("block"); setInfoContent("how")}}>How to&nbsp;<img src={info} alt="info" width="15" heigh="15"/></li>
-                    <li><Button id="sign-out" onClick={signOut}>Sign Out</Button></li>
+                    {/*<li><Button id="sign-out" onClick={signOut}>Sign Out</Button></li>*/}
 
                 </ul>
                     

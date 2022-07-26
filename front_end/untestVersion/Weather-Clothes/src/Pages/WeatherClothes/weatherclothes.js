@@ -21,33 +21,33 @@ const WeatherClothes = () => {
     const {setBck, setInfoPop, setInfoContent} = useContext(UserContext);
 
     // Location, Weather & Weekday Data fetching
-    useEffect(() => {
+    // useEffect(() => {
+    //
+    //     // setBck(`url(${garmetsBck})`);
+    //     setBck("-webkit-linear-gradient(150deg, #ecdfd100 50%, #fcf3ed 50%)");
+    //
+    //     // Get location data from DB
+    //     db
+    //     .collection("city")
+    //     .where('uid', '==', user.uid)
+    //     .onSnapshot(snapshot => setLocation(snapshot.docs.map((doc) => doc.data().city)))
+    //
+    //     // Get & set the day of the week
+    //     setWeekDay(moment().format('dddd'));
+    //
+    // //eslint-disable-next-line
+    // },[])
 
-        // setBck(`url(${garmetsBck})`);
-        setBck("-webkit-linear-gradient(150deg, #ecdfd100 50%, #fcf3ed 50%)");
-
-        // Get location data from DB
-        db
-        .collection("city")
-        .where('uid', '==', user.uid)
-        .onSnapshot(snapshot => setLocation(snapshot.docs.map((doc) => doc.data().city)))
-
-        // Get & set the day of the week
-        setWeekDay(moment().format('dddd'));
-
-    //eslint-disable-next-line
-    },[])
-
-    useEffect(() => {
-
-        // Get weather data from API based on city from DB
-        API.search(location)
-        .then((res) => {
-            console.log(res)
-            setTodaysTemp(res.data.list[0].main.temp)
-        })
-
-    },[location])
+    // useEffect(() => {
+    //
+    //     // Get weather data from API based on city from DB
+    //     API.search(location)
+    //     .then((res) => {
+    //         console.log(res)
+    //         setTodaysTemp(res.data.list[0].main.temp)
+    //     })
+    //
+    // },[location])
 
     useEffect(() => {
 
@@ -129,17 +129,17 @@ const WeatherClothes = () => {
 
     };
     
-    useEffect(() => {
-
-        const savedOutfit = localStorage.getItem("todaysOutfit");
-
-        // If there is an outfit saved in local storage set it to Outfit state else determine a new one
-        savedOutfit ? setOutfit(savedOutfit) : queryDb()
-
-        console.log(savedOutfit);
-        
-    //eslint-disable-next-line
-    },[]);
+    // useEffect(() => {
+    //
+    //     const savedOutfit = localStorage.getItem("todaysOutfit");
+    //
+    //     // If there is an outfit saved in local storage set it to Outfit state else determine a new one
+    //     savedOutfit ? setOutfit(savedOutfit) : queryDb()
+    //
+    //     console.log(savedOutfit);
+    //
+    // //eslint-disable-next-line
+    // },[]);
 
     const todaysFit = () => {
         if (noFits === true) {
