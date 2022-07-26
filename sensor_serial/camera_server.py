@@ -18,6 +18,7 @@ while True:
         fig = camera.capture('./temp_imgs/frame%03d.jpg' % frame)
     
         img_str = {'upload':fig}
+        print(img_str)
         res=requests.request("POST",'http://10.24.239.172:9000/uploadImage',data={'name':'frame%03d.jpg' % frame}, files=img_str)
 
         frame += 1
