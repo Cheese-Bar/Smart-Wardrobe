@@ -78,11 +78,11 @@ while 1:
 			elif y_train[i]==6:
 				X.append(x_train[i])
 				Y.append(1)#changxiu
-		x_train=X
-		y_train=Y
+		x_train=np.array(X)
+		y_train=np.array(Y)
 		
 		x_train = tf.keras.utils.normalize(x_train, axis = 1)
-		x_train=x_train.reshape(60000,28,28,1)
+		x_train=x_train.reshape(len(x_train),28,28,1)
 		
 		model = tf.keras.models.Sequential()
 		# model = Sequential()
@@ -117,7 +117,7 @@ while 1:
 
 		# model.compile(optimizer = "sgd", loss = "sparse_categorical_crossentropy", metrics = ["accuracy"])
 		model.compile(optimizer = "adam", loss = "sparse_categorical_crossentropy", metrics = ["accuracy"])
-		model.fit(x_train, y_train, epochs = 30)
+		model.fit(x_train, y_train, epochs = 60)
 		
 		model.save("smartwardrobe2.model", save_format = "h5")
 	elif command_list[0] == "test":
