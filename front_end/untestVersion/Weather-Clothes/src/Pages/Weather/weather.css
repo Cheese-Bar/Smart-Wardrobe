@@ -4,19 +4,24 @@
     height: 100vh;
     background-image: url(../..//images/ren.png);
     background-size: cover;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: 1px solid #000000;
 }
 
-.enter-city {
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.596);
+.myDiv{
+    position: absolute;
+    top:15%;
+    height: 20px;
+    background-color: rgba(168, 32, 68, 0.87);
 }
 
-.enter-city > h1 {
-    font-weight: 400;
-    font-size: 50px;
-}
-
-.enter-city > div > input {
-    font-size: 25px;
-    background-color: inherit;
+.char{
+    position: absolute;
+    top: 30%;
+    margin: auto;
+    width: 1000px;
+    height: 500px;
+    background-color: rgba(31, 168, 147, 0);
 }

@@ -8,6 +8,8 @@ import { storage } from "../../utils/firebase";
 // import { Toast } from 'react-bootstrap';
 import garmetsBck from "../../images/garmets.png";
 import { UserContext } from "../../utils/UserContext";
+import server from "../../server";
+import Axios from "axios";
 
 const AddOutfit = () => {
 
@@ -24,54 +26,50 @@ const AddOutfit = () => {
     const [fitContext, setFitContext] = useState();
     const {setBck, setInfoPop, setInfoContent} = useContext(UserContext);
 
-    useEffect(() => {
 
-        setBck(`url(${garmetsBck})`);
-
-    },[setBck])
-
-    // TODO: 改上传图片方法
-    const handleImgUpload = (event) => {
-
-        // event.preventDefault()
-        //
-        // // Upload image to firestore and store in variable
-        // // const uploadTask = storage.ref(`images/${fitImage.name}`).put(fitImage);
-        //
-        // // Get url of image just uploaded to firestore storage
-        // uploadTask.on(
-        //     "state_changed",
-        //     snapshot => {},
-        //     error => {
-        //         console.log(error)
-        //     },
-        //     () => {
-        //         storage
-        //         .ref("images")
-        //         .child(fitImage.name)
-        //         .getDownloadURL()
-        //         .then(url =>
-        //             setImgUrl(url)
-        //         )
-        //     }
-        // )
-        // setInfoPop("block");
-        // setInfoContent("img")
-
-    };
+    // // TODO: 改上传图片方法
+    // const handleImgUpload = (event) => {
+    //
+    //     Axios.post("http://10.24.239.172:9000/uploadImage",{name: outfitName,url: imgUrl})
+    //
+    //     event.preventDefault()
+    //
+    //     // Upload image to firestore and store in variable
+    //     // const uploadTask = storage.ref(`images/${fitImage.name}`).put(fitImage);
+    //
+    //     // Get url of image just uploaded to firestore storage
+    //     uploadTask.on(
+    //         "state_changed",
+    //         snapshot => {},
+    //         error => {
+    //             console.log(error)
+    //         },
+    //         () => {
+    //             storage
+    //             .ref("images")
+    //             .child(fitImage.name)
+    //             .getDownloadURL()
+    //             .then(url =>
+    //                 setImgUrl(url)
+    //             )
+    //         }
+    //     )
+    //     setInfoPop("block");
+    //     setInfoContent("img")
+    //
+    // };
 
     const addOutfit = () => {
-
-        wardrobeRef.add(
-            {
-                uid: user.uid,
-                outfit: outfitName,
-                weather: fitWeather,
-                temperature: fitTemp,
-                image: imgUrl,
-                context: fitContext
-            }
-        ).then(history.push('/wardrobe'))
+        Axios.post("http://"+server+":9000/uploadImage",{name: outfitName,upload: fitImage })
+            .then(function (res) {
+                if(res.data.statu === "success"){
+                    history.push('/wardrobe');
+                }else{
+                        window.confirm("Add outfit failed!");
+                    }
+                }).catch(function (error) {
+                    window.confirm("error!");
+                })
     };
 
     return(
@@ -95,40 +93,7 @@ const AddOutfit = () => {
                         <br/>
 
                         <input type="file" accept="image/*" onChange={(event) => setFitImage(event.target.files[0])} id="img-upload"></input>
-                        <button onClick={(event) => {handleImgUpload(event)}} id="upload-button">Upload</button>
-                        
-                        <br/>
-                        <br/>
-
-                        {// Get Weather description input for oufit
-                        }
-                        <select className="custom-select" style={{width: "133px"}} onChange={(e) => {
-                            setFitWeather(e.target.value)
-                        }}>
-                            <option></option>
-                            <option value="clear Sky" className="select-items">Clear Sky</option>
-                            <option value="overcast">Overcast</option>
-                            <option value="rain">Rain</option>
-                            <option value="sunny">Sunny</option>
-                        </select>
-
-                        <select className="custom-select" style={{width: "133px"}} onChange={(e) => {
-                            setFitTemp(e.target.value)
-                        }}>
-                            <option></option>
-                            <option value="neutral">Neutral</option>
-                            <option value="hot">Hot</option>
-                            <option value="cold">Cold</option>
-                        </select>
-
-                        <select className="custom-select" style={{width: "133px"}} onChange={(e) => {
-                            setFitContext(e.target.value)
-                        }}>
-                            <option></option>
-                            <option value="home">Home</option>
-                            <option value="work">Work</option>
-                            <option value="casual">Casual</option>
-                        </select>
+                        {/*<button onClick={(event) => {handleImgUpload(event)}} id="upload-button">Upload</button>*/}
 
                         <br/>
                         <br/>

@@ -11,7 +11,7 @@ import AddOutfit from './Pages/AddOutfit/addoutfit';
 import Wardrobe from './Pages/Wardrobe/wardrobe';
 import Location from "./Pages/Location/location";
 import LogIn from "./Pages/LogIn/login";
-import Weather from "./Pages/Weather/weather"
+import Weather from "./Pages/Weather/weather";
 import { useStateValue } from "./utils/stateProvider";
 // import { auth } from "./utils/firebase";
 import { actionTypes } from "./utils/reducer";
@@ -27,21 +27,6 @@ const App = () => {
   const [infoPop, setInfoPop] = useState("none");
   const [infoContent, setInfoContent] = useState();
   const [confirmDl, setConfirmDl] = useState();
-
-  // useEffect(() => { //这里用了firebase的用户验证
-  //
-  //   setFetching(true)
-  //   // Check to see if user is logged in via firebase persistence
-  //   auth.onAuthStateChanged(userSaved => {
-  //     dispatch({
-  //       type: actionTypes.SET_USER,
-  //       // If there's a user send user info to data layer (will be null if no persistence user)
-  //       user: userSaved
-  //   })
-  //   setFetching(false)
-  //   })
-  //
-  // },[dispatch])
 
   const popContent = (content) => {
     if (content === "how") {
