@@ -132,7 +132,7 @@ def getHistory():
 def uploadImg():
 	name = request.form.get('name')
 	img = request.files.get('upload')
-	print({'smfile':img})
+	print('log',{'smfile':img})
 	url = upload({'smfile':img})
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
