@@ -19,11 +19,13 @@ const Chart = () =>{
                     setTemp_list(res.data.temp_list);
                     setHumidity_list(res.data.humi_list);
                     setPressure_list(res.data.pres_list);
+                    console.log(res.data);
                 }else{
                     window.confirm("Get data failed!");
                 }
             }).catch(function (error) {
                 window.confirm("error!");
+            console.log(error);
             })
     },[])
 
@@ -56,7 +58,7 @@ const Chart = () =>{
                 type: 'line',
                 color: '#3ba272',
                 smooth: 'true',
-                data: [],
+                data: temp_list,
                 markPoint: {
                     symbolSize: 100,
                     data: [{ name: 'prediction', value: 0, xAxis: 24, yAxis:  - 1.5 }]
