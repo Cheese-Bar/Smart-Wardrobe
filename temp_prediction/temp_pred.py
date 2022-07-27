@@ -22,12 +22,12 @@ def multivariate_data(x,y, start_index, end_index, history_size,
     start_index = start_index + history_size
     
     if end_index is None:
-        end_index = len(dataset) - target_size
+        end_index = len(x) - target_size
 
     for i in range(start_index, end_index):
         indices = range(i-history_size, i, step) # step表示滑动步长
         mid_data=x.iloc[indices]
-        data.append(mid_data)
+        data.append(np.array(mid_data))
 
         if single_step:
             mid_data=y.iloc[i+target_size]
@@ -35,6 +35,7 @@ def multivariate_data(x,y, start_index, end_index, history_size,
         else:
             labels.append(y.iloc[i:i+target_size])
 
+    # print(len(data[0][0]), len(labels[0]))
     return np.array(data), np.array(labels)
 
 def create_batch_dataset(x,y,train=True,buffer_size=1000,batch_size=128):
@@ -44,13 +45,13 @@ def create_batch_dataset(x,y,train=True,buffer_size=1000,batch_size=128):
     else:
         return batch_data.batch(batch_size)
 
-data_path="./beijing2.csv"
+data_path="./shenzhen.csv"
 dataset=pd.read_csv(data_path, parse_dates=["dates"],index_col=False)
 dataset=dataset.set_index(dataset.columns[0])
 # dataset=pd.read_csv(data_path)
 
-df=dataset[['T','Po','U']]
-df=dataset[['T','Po','U']]
+df=dataset[['T','P0','U']]
+df=dataset[['T','P0','U']]
 df.columns=['Temp','pressure','Humidity']
 df['month']=df.index.month
 df['hour']=df.index.hour
@@ -62,7 +63,7 @@ future=['sin(h)','cos(h)','month','Temp','pressure','Humidity']
 for col in future:
     scaler=MinMaxScaler()
     if(col not in ['sin(h)','cos(h)']):
-    	dataset[col]=scaler.fit_transform(dataset[col].values.reshape(-1,1))
+    	df[col]=scaler.fit_transform(df[col].values.reshape(-1,1))
 
 x=df[future]
 y=df['Temp']
@@ -71,6 +72,7 @@ x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,shuffle=False,r
 
 
 #取得训练集，和测试集的格式
+print(x_train.shape)
 train_dataset,train_labels=multivariate_data(x_train,y_train,0,None,24,1,1,False)
 test_dataset,test_labels=multivariate_data(x_test,y_test,0,None,24,1,1,False)
 print(test_dataset)
@@ -93,7 +95,7 @@ model.compile(optimizer='adam',loss='mse')
 #模型保存的相关设置
 utils.plot_model(model)
 checkpoint_file= 'test_model_gooood.hdf5'
-checkpoint_callback=ModelCheckpoint(filepath=checkpoint_file,monitor='loss',moode='min',save_best_only=True,save_weights_only=True)
+checkpoint_callback=ModelCheckpoint(filepath=checkpoint_file,monitor='loss',moode='min',save_best_only=True,save_weights_only=False)
 #模型训练
 history=model.fit(train_batch_dataset,epochs=30,validation_data=test_batch_dataset,callbacks=[checkpoint_callback])
 

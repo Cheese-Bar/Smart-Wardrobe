@@ -9,10 +9,13 @@ from PIL import Image
 from io import BytesIO
 from werkzeug.datastructures import FileStorage
 from sklearn.preprocessing import MinMaxScaler
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
 def predict_temp(data):
     print(data)
-    final_model = tf.keras.models.load_model("./model/test_model.hdf5",compile=True)
+    # final_model = tf.keras.models.load_model("./model/test_model.hdf5",compile=True)
+    final_model = tf.keras.models.load_model("./model/test_model_gooood.hdf5",compile=True)
     # data = np.array(data, dtype='float32')
     df = pd.DataFrame(data)
     df.columns=['time','temp', 'humidity', 'pressure']
