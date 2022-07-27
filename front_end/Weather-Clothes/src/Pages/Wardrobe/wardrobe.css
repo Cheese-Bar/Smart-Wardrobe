@@ -1,14 +1,21 @@
 .wardrobe-page {
-    background-color: rgba(255, 255, 255, 0.795);
+    background-color: rgb(232, 153, 100);
+    background-image: url("../../myimage/back3.png");
     position: absolute;
+    top: 0;
+    left: 0;
     height: 100vh;
     width: 100vw;
+    background-size: cover;
+    justify-content: center;
+    align-items: center;
     z-index: 3;
 }
 
+
 .add-fit {
     width: 100%;
-    bottom: 25;
+    bottom: 25px;
     text-align: center;
     padding-top: 45px;
 }
@@ -25,7 +32,7 @@
 #fit-name {
     text-decoration: underline;
     font-size: 50px;
-    /* margin-bottom: 20px; */
+    margin-top: 50px;
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -57,8 +64,8 @@
         --slideNum: 1;
     }
     #fit-pic {
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
     }
     .add-fit {
         padding-top: 25px;
