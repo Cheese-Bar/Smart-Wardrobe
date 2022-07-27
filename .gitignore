@@ -2,3 +2,4 @@
 /sensor_serial/*.db
 /database/
 /front_end/Weather-Clothes/*.idea
+/back_end/__pycache__/

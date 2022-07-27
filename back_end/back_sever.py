@@ -1,5 +1,8 @@
 import json
+from re import T
 from unittest import result
+
+from matplotlib.pyplot import axis
 from flask import Flask, request,  redirect, render_template,session
 import sqlite3
 from flasgger import Swagger
@@ -8,6 +11,10 @@ import requests
 import random
 import numpy as np
 from predict import predict_temp, temp_to_cloth, cloth_recognition
+
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
 app = Flask(__name__)
 Swagger(app)
@@ -125,11 +132,16 @@ def getHistory():
 	result = cur.execute(sql).fetchall()
 	p_temp = predict_temp(result)
 	result = np.array(result)
+	# temp_list = list(np.concatenate((result[:,1],(np.array(p_temp[0][0], dtype='float32')))))
 	temp_list = list(result[:,1])
+	temp_list = [float(x) for x in temp_list]
+	temp_list.append(float(str(p_temp[0][0])))
+	# print (type(temp_list), len(temp_list),type(p_temp))
+	# temp_list = temp_list.append(p_temp[0][0])
 	humi_list = list(result[:,2])
 	pres_list = list(result[:,3])
-	temp_list.append(p_temp)
-	
+	# temp_list.append(p_temp)
+	print(temp_list)
 	re = {'temp_list': temp_list,
 			'humi_list': humi_list,
 			'pres_list': pres_list}
@@ -230,9 +242,9 @@ def getBest():
 	# TODO: 根据温度-衣服模型获得合适的type
 	c_type = temp_to_cloth(p_temp)
 	# TODO: 根据type 挑选一件合适的衣服
-	print(p_temp)
+	print(c_type)
 
-	sql = '''select name, url from images
+	sql = '''select name, url, type from images
 	where type = ?'''
 	result = cur.execute(sql, (c_type,)).fetchall()
 	cur.close()
