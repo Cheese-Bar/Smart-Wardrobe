@@ -9,6 +9,8 @@ from PIL import Image
 from io import BytesIO
 from werkzeug.datastructures import FileStorage
 from sklearn.preprocessing import MinMaxScaler
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
 def predict_temp(data):
     print(data)
