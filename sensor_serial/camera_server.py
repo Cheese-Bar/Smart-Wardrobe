@@ -14,7 +14,7 @@ frame = 1
 while True:
     try:
         button.wait_for_press()
-        sleep(5)
+        sleep(2.5)
         camera.capture('./temp_imgs/frame%03d.jpg' % frame)
         img_str = {'upload':open('./temp_imgs/frame%03d.jpg' % frame, 'rb')}
         res=requests.request("POST",'http://192.168.155.197:9000/uploadImage',data={'name':'frame%03d.jpg' % frame}, files=img_str)
