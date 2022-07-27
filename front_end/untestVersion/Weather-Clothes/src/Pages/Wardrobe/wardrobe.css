@@ -8,7 +8,7 @@
 
 .add-fit {
     width: 100%;
-    bottom: 25;
+    bottom: 25px;
     text-align: center;
     padding-top: 45px;
 }
@@ -57,8 +57,8 @@
         --slideNum: 1;
     }
     #fit-pic {
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
     }
     .add-fit {
         padding-top: 25px;
