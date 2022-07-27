@@ -251,9 +251,9 @@ def getBest():
 	conn.close()
 
 	if result: 
-		re = {'bestfit': result[random.randint(0,len(result)-1)]}
+		re = {'bestfit': result[random.randint(0,len(result)-1)], 'statu':'success'}
 		return json.dumps(re)
-	return '当前没有合适的衣服捏， 快去添加新衣服叭~'
+	return json.dumps({'statu':'fail','msg':'当前没有合适的衣服捏， 快去添加新衣服叭~'})
 
 @app.route('/deleteImage/<id>')
 def delImag(id):
