@@ -101,7 +101,7 @@ def getRealData():
 def getHistory():
 	"""
 	获得历史的室外数据
-	[24] + [24] + [24] + (1) 暂未实现
+	[24] + [24] + [24] + (1) 已实现
     ---
     responses:
       500:
@@ -112,21 +112,24 @@ def getHistory():
 
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
-	sql = '''select temp, humidity, pressure
+	sql = '''select time, temp, humidity, pressure
 			from (
 					select *
 					from outdoor
-
+					where temp and humidity and pressure is not null
 					order by time desc
 					limit 24
 				)
 			order by time'''
 		# where temp and humidity and pressure is not null
 	result = cur.execute(sql).fetchall()
+	p_temp = predict_temp(result)
 	result = np.array(result)
-	temp_list = list(result[:,0])
-	humi_list = list(result[:,1])
-	pres_list = list(result[:,2])
+	temp_list = list(result[:,1])
+	humi_list = list(result[:,2])
+	pres_list = list(result[:,3])
+	temp_list.append(p_temp)
+	
 	re = {'temp_list': temp_list,
 			'humi_list': humi_list,
 			'pres_list': pres_list}

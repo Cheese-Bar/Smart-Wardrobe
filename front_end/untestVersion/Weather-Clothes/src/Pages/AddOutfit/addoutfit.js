@@ -60,15 +60,22 @@ const AddOutfit = () => {
     // };
 
     const addOutfit = () => {
-        Axios.post("http://"+server+":9000/uploadImage",{name: outfitName,upload: fitImage })
+        let formData = new FormData();
+        formData.append("name", outfitName);
+
+        formData.append("upload", fitImage);
+
+        Axios.post("http://"+server+":9000/uploadImage", formData)
             .then(function (res) {
                 if(res.data.statu === "success"){
                     history.push('/wardrobe');
+                    console.log("add out fit success");
                 }else{
                         window.confirm("Add outfit failed!");
                     }
                 }).catch(function (error) {
                     window.confirm("error!");
+                    console.log(error);
                 })
     };
 
@@ -101,7 +108,7 @@ const AddOutfit = () => {
                         {// If there is no outfit name and details disable submit button otherwise enable
                         }
                         {
-                        outfitName && fitWeather && fitTemp && imgUrl && fitContext  ? 
+                        outfitName && fitImage  ?
                         <Button onClick={() => addOutfit()}>Submit</Button>
                         :
                         <Button disabled>Submit</Button>

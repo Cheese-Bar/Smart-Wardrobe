@@ -29,8 +29,15 @@ const Navbar = () => {
 
         // Get today current temperature data
         Axios.get('http://'+server+':9000/getRealData').then(function (res) {
-            setInTemp(res.data.indoor.temp);
-            console.log(InTemp);
+            if(res.data.statu === "success"){
+                setInTemp(res.data.indoor.temp);
+                console.log("Get current temperature-->GetRealData");
+            }else{
+                window.confirm("Get data failed!");
+            }
+        }).catch(function (error) {
+            window.confirm("error!");
+            console.log(error);
         })
     },[])
     
@@ -90,7 +97,7 @@ const Navbar = () => {
 
                                 if (typeof InTemp === "number") {
     
-                                    const temperature = "Wardrobe" + InTemp + " °C";
+                                    const temperature = "Wardrobe : " + InTemp + " °C";
     
                                     return (
                                         <>

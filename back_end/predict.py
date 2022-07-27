@@ -23,6 +23,8 @@ def predict_temp(data):
     df['sin(h)']=[np.sin((x) * (2 * np.pi / 24)) for x in df['hour']]
     df['cos(h)']=[np.cos((x) * (2 * np.pi / 24)) for x in df['hour']]
     future=['sin(h)','cos(h)','month','temp','pressure','humidity']
+    # 气压转化为毫米汞柱
+    df['pressure'] = df['pressure']*0.0075
     #数据归一化，由于sin和cos本来就是-1到1，不用归一化
     for col in future:
         scaler=MinMaxScaler()
@@ -39,7 +41,7 @@ def predict_temp(data):
 def temp_to_cloth(temp):
     with open('./model/svc.pickle','rb') as f:
         model = pickle.load(f)
-        c_type = model.predict([[temp]])
+        c_type = model.predict(temp)
         print(c_type)
     return newindex(c_type)
 

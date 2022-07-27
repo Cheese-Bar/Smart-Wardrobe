@@ -38,11 +38,13 @@ const W3 = () => {
                 setOutPressure(Out.pressure);
                 setInTemp(In.temp);
                 setInHumidity(In.humidity);
+                console.log(res.data);
             }else{
                 window.confirm("Get data failed!");
             }
         }).catch(function (error) {
             window.confirm("error!");
+            console.log(error);
         })
     },[])
 

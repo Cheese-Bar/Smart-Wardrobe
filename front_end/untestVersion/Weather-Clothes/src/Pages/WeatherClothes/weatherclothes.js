@@ -39,10 +39,14 @@ const WeatherClothes = () => {
                 setNoFits(false);
                 setClothName(res.data.bestfit[0]);
                 setClothURL(res.data.bestfit[1]);
+                console.log("res.data");
             }else {
                 setNoFits(true);
             }
-        });
+        }).catch(function (error) {
+            window.confirm("error!");
+            console.log(error);
+        })
     },[])
 
 
@@ -101,7 +105,7 @@ const WeatherClothes = () => {
 
                     <div className="col">
 
-                        <h1>Today's Outfit</h1>
+                        <h1 >Today's Outfit</h1>
                         <hr />
                         {todaysFit()}
 
