@@ -2,7 +2,13 @@
 
 Smart-Wardrobe —— an AIoT project
 
-Fore more details: [Cheese-Bar/Smart-Wardrobe (github.com)](https://github.com/Cheese-Bar/Smart-Wardrobe)
+Fore more details: https://github.com/Cheese-Bar/Smart-Wardrobe
+
+Main Structure：
+
+![图片aiot](https://s2.loli.net/2022/07/28/dEpg8VtI1r4TRHy.png)
+
+<img src="https://s2.loli.net/2022/07/28/SQwtpgRknioAqB3.png" style="zoom:80%;" />
 
 ## 硬件
 
@@ -75,3 +81,4 @@ Fore more details: [Cheese-Bar/Smart-Wardrobe (github.com)](https://github.com/C
 
 ## 接口
 - [x] Swagger api 文档
+
