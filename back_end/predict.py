@@ -25,7 +25,7 @@ def predict_temp(data):
     df['hour']=df.index.hour
     df['sin(h)']=[np.sin((x) * (2 * np.pi / 24)) for x in df['hour']]
     df['cos(h)']=[np.cos((x) * (2 * np.pi / 24)) for x in df['hour']]
-    future=['sin(h)','cos(h)','month','temp','pressure','humidity']
+    future=['sin(h)','cos(h)','month','pressure','humidity','temp']
     # 气压转化为毫米汞柱
     df['pressure'] = df['pressure']*0.0075
     #数据归一化，由于sin和cos本来就是-1到1，不用归一化

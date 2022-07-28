@@ -37,18 +37,6 @@ def upload(img):
 		print(e)
 		return res['images']
 
-@app.route('/login',methods=['GET',"POST"])#路由默认接收请求方式位POST，然而登录所需要请求都有，所以要特别声明。
-def login():
-	if request.method=='GET':
-		return  render_template('login.html')
-	user=request.form.get('user')
-	pwd=request.form.get('pwd')
-	if user=='admin' and pwd=='123':#这里可以根据数据库里的用户和密码来判断，因为是最简单的登录界面，数据库学的不是很好，所有没用。
-		session['user_info']=user
-		return redirect('/index')
-	else:
-		return  render_template('login.html',msg='用户名或密码输入错误')
- 
 @app.route('/getRealData')
 def getRealData():
 	# parameters:
@@ -103,7 +91,6 @@ def getRealData():
 
 	return json.dumps(res)
 
-
 @app.route('/getHistory')
 def getHistory():
 	"""
@@ -124,10 +111,10 @@ def getHistory():
 					select *
 					from outdoor
 					where temp and humidity and pressure is not null
-					order by time desc
+					order by id desc
 					limit 24
 				)
-			order by time'''
+			order by id'''
 		# where temp and humidity and pressure is not null
 	result = cur.execute(sql).fetchall()
 	p_temp = predict_temp(result)
@@ -144,7 +131,8 @@ def getHistory():
 	print(temp_list)
 	re = {'temp_list': temp_list,
 			'humi_list': humi_list,
-			'pres_list': pres_list}
+			'pres_list': pres_list,
+			'pred_temp': '{:.2f}'.format(float(p_temp[0][0]))}
 	re['statu'] = 'success'
 	return json.dumps(re)
 
@@ -191,12 +179,12 @@ def getAll():
     """
 	conn = sqlite3.connect('../database/smart_wardrobe.db')
 	cur = conn.cursor()
-	sql = '''select id, name, url from images'''
+	sql = '''select id, name, url, type from images'''
 	result = cur.execute(sql).fetchall()
 	re = {'statu':'','all':[]}
 	if result:
 		for item in result:
-			re['all'].append({'id': item[0],'name':item[1], 'url':item[2]})
+			re['all'].append({'id': item[0],'name':item[1], 'url':item[2], 'type':item[3]})
 		re['statu'] = 'success'
 	else:
 		re['statu'] = 'fail'
@@ -231,10 +219,10 @@ def getBest():
 					select *
 					from outdoor
 					where temp and humidity and pressure is not null
-					order by time desc
+					order by id desc
 					limit 24
 				)
-			order by time'''
+			order by id'''
 
 	history = cur.execute(sql).fetchall()
 	p_temp = predict_temp(history)
