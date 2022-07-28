@@ -1,11 +1,15 @@
 .day-page {
-    background-image: url(../../images/rack.png);
+    background-image: url(../../myimage/background.png);
     position: absolute;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100vw;
     z-index: -1;
+}
+
+.col > h1 {
+    color: #ffffff;
 }
 
 .day-list{
@@ -17,8 +21,12 @@
     padding-bottom: 20px;
 }
 
+.day-list > li{
+    color: #ffffff;
+}
+
 .days {
-    opacity: 20%;
+    opacity: 40%;
     font-size: 20px;
 }
 
@@ -42,7 +50,7 @@
 
 @media screen and (max-width: 540px) {
     .day-page {
-        background-image: url(../../images/rack.png);
+        background-image: url(../../myimage/background.png);
         background-size: cover;
         background-position: top left;
     }

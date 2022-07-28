@@ -17,7 +17,7 @@
 
 .nav-links > li{
   cursor: pointer;
-  margin-top: 35px;
+  margin-top: 20%;
 }
 
 .nav-links {
@@ -26,8 +26,8 @@
   list-style-type: none;
   position: absolute;
   left: 0px;
-  background-color: #fcf3ed;
-  width: 50%;
+  background-color: #8d999d;
+  width: 30%;
   height: 100vh;
   display: flex;
   flex-direction: column;

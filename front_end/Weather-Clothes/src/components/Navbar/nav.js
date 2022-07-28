@@ -5,13 +5,14 @@ import { IconButton, Avatar } from "@material-ui/core";
 import { useStateValue } from "../../utils/stateProvider";
 import { useHistory } from "react-router-dom";
 // import moment from "moment";
-import { auth } from "../../utils/firebase";
-import { Button } from "@material-ui/core";
-import API from "../../utils/API";
-import db from "../../utils/firebase";
 import temp from "../../images/temp.png";
 import info from "../../images/info.png";
+import hum from "../../images/hum.png";
 import { UserContext } from "../../utils/UserContext";
+import Axios from "axios";
+import Login from "../../Pages/LogIn/login";
+import server from "../../server";
+import Wardrobe from "../../Pages/Wardrobe/wardrobe";
 
 const Navbar = () => {
 
@@ -22,32 +23,26 @@ const Navbar = () => {
     // Determine annimation
     const [fadeIn, setFadeIn] = useState(0);
     const history = useHistory();
-    const [location, setLocation] = useState();
-    const [todaysTemp, setTodaysTemp] = useState();
-    const [todayDescript, setTodayDescript] = useState();
+    const [InTemp, setInTemp] = useState();
+    const [InHumidity, setInHumidity] = useState();
     const {setInfoPop, setInfoContent} = useContext(UserContext);
 
     useEffect(() => {
 
-        // Get location data from DB
-        db
-        .collection("city")
-        .where('uid', '==', user.uid)
-        .onSnapshot(snapshot => setLocation(snapshot.docs.map((doc) => doc.data().city)))
-        
-    //eslint-disable-next-line    
-    },[])
-
-    useEffect(() => {
-
-        // Get weather data from API based on city from DB
-        API.search(location)
-        .then((res) => {
-            setTodaysTemp(res.data.list[0].main.temp)
-            setTodayDescript(res.data.list[0].weather[0].description)
+        // Get today current temperature data
+        Axios.get('http://'+server+':9000/getRealData').then(function (res) {
+            if(res.data.statu === "success"){
+                setInTemp(res.data.indoor.temp);
+                setInHumidity(res.data.indoor.humidity);
+                console.log("Get current temperature-->GetRealData");
+            }else{
+                window.confirm("Get data failed!");
+            }
+        }).catch(function (error) {
+            window.confirm("error!");
+            console.log(error);
         })
-
-    },[location])
+    },[])
     
     // Toggle Our Navigation Bar
     const toggleNav = () => {
@@ -77,10 +72,10 @@ const Navbar = () => {
             case "/add":
                 history.push("/add")
                 break;
-            
-            case "/location":
-                history.push("/location")
-                break;    
+
+            case "/weather":
+                history.push("/weather")
+                break;
         
             default:
                 break;
@@ -89,14 +84,6 @@ const Navbar = () => {
         toggleNav();
     };
 
-    // Convert kelvin temp to faranheight
-    const kelvinToFaran = (kelvin) => {
-        return (kelvin - 273.15) * 9/5 + 32
-    };
-
-    const signOut = () => {
-        auth.signOut()
-    };
 
     return(
         <header>
@@ -111,14 +98,17 @@ const Navbar = () => {
                         {
                             (()=> {
 
-                                if (typeof todaysTemp === "number") {
+                                if (typeof InTemp === "number") {
     
-                                    const temperature = Math.round(kelvinToFaran(todaysTemp)) + "°";
+                                    const temperature = "Wardrobe : " + InTemp + " °C";
+                                    const humidity = InHumidity;
     
                                     return (
                                         <>
                                             <img src={temp} alt="tempurature-icon" height="25px" width="25px"/>
-                                            {temperature + " " + todayDescript}
+                                            {temperature+"  "}
+                                            <img src={hum} alt="humidity-icon" height = "25px" width="20px"/>
+                                            {" " +humidity}
                                         </>
                                     )
                                 }
@@ -136,12 +126,12 @@ const Navbar = () => {
 
                 <ul className={`nav-links ${navActive === "true" ? "nav-active" : ""}`} fadein={fadeIn} onAnimationEnd={() => {setFadeIn(0)}}>
                     
-                    <li><Avatar src={user.photoURL}/></li>
-                    <li onClick={() => linkAction("/location")}>Location</li>
+                    {/*<li><Avatar src={user.photoURL}/></li>*/}
+                    <li onClick={() => linkAction("/weather")}>Weather</li>
                     <li onClick={() => linkAction("/wardrobe")}>Wardrobe</li>
                     <li onClick={() => linkAction("/")}>Today's Outfit</li>
                     <li className="how" onClick={() => {setInfoPop("block"); setInfoContent("how")}}>How to&nbsp;<img src={info} alt="info" width="15" heigh="15"/></li>
-                    <li><Button id="sign-out" onClick={signOut}>Sign Out</Button></li>
+                    {/*<li><Button id="sign-out" onClick={signOut}>Sign Out</Button></li>*/}
 
                 </ul>
                     

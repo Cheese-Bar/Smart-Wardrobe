@@ -2,6 +2,12 @@
     display: grid;
     place-items: center;
     height: 100vh;
+    width: 100vw;
+    background-image: url(../../myimage/back5.png);
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .clothing-inputs {
@@ -16,18 +22,21 @@ input {
 }
 
 #img-upload::-webkit-file-upload-button {
-        color: black;
+        color: white;
         display: inline-block;
-        background: #ffffff00;
+        background: #604349;
         border: none;
         padding: 7px 15px;
-        border-radius: 3px;
+        border-radius: 25px;
         white-space: nowrap;
         cursor: pointer;
 }
 
 #img-upload {
-    background-color: inherit;
+    background-color: rgba(255, 255, 255, 0.5);
+    /*opacity: 0.5;*/
+    width: 300px;
+    border-radius: 25px;
 }
 
 .fits {
@@ -38,15 +47,6 @@ input {
     text-align-last: center;
 }
 
-.select-items {
-    position: absolute;
-    background-color: DodgerBlue;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99;
-}
-
 #enter-fit {
     font-weight: 400;
     font-size: 50px;
@@ -54,5 +54,35 @@ input {
 
 #fit-input {
     font-size: 25px;
-    background-color: inherit;
+    background-color: rgba(255, 255, 255, 0.5);
+    /*opacity: 0.5;*/
+    width: 300px;
+    border-radius: 25px;
+}
+
+#button {
+    position: relative;
+    left: 100px;
+    width: 100px;
+    background: #604349;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 20px 10px 20px;
+    color: white;
+    text-align:center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+#button:active{
+    position: relative;
+    left: 100px;
+    width: 100px;
+    background: rgba(255, 255, 255, 0);
+    border:  1px solid #604349;;
+    border-radius: 5px;
+    padding: 10px 20px 10px 20px;
+    color: #604349;
+    text-align:center;
+    text-transform: uppercase;
+    font-weight: bold;
 }

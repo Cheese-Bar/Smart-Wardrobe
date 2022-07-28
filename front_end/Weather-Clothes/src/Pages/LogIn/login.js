@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
-import { Button } from "@material-ui/core";
+import {Button, colors} from "@material-ui/core";
 import "./login.css";
 import { firebase, auth, provider } from "../../utils/firebase";
 import { useStateValue } from "../../utils/stateProvider";
 import { actionTypes } from "../../utils/reducer";
 import anime from 'animejs/lib/anime.es.js';
 import { storage } from "../../utils/firebase";
+import Axios from "axios";
+import { useHistory } from "react-router-dom";
 // import sky from "../../images/rack.png";
 // import jean from "../../images/jean.png";
 // import catImg from "../../images/cat.png";
@@ -13,7 +15,9 @@ import { storage } from "../../utils/firebase";
 
 const LogIn = () => {
 
-    const [catImg, setCatImg] = useState(); 
+    const history = useHistory()
+
+    const [catImg, setCatImg] = useState();
     console.log("LogIn -> catImg", catImg)
     const [sunImg, setSunImg] = useState();
     console.log("LogIn -> sunImg", sunImg)
@@ -24,47 +28,23 @@ const LogIn = () => {
 
     useEffect(() => {
 
-            storage
-            .ref("myImages")
-            .child("cat.png")
-            .getDownloadURL()
-            .then(url => {
-                setCatImg(url)
-            })
-
-            storage
-            .ref("myImages")
-            .child("sun.png")
-            .getDownloadURL()
-            .then(url => {
-                setSunImg(url)
-            })
-
         anime({
-            targets: '.login-container > h1',
+            targets: '.login-container > div',
             keyframes: [
-                {opacity: 0},
-                {opacity: 10},
-                {opacity: 20},
-                {opacity: 30},
-                {opacity: 40},
-                {opacity: 50},
-                {opacity: 60},
-                {opacity: 70},
-                {opacity: 80},
-                {opacity: 90},
-                {opacity: 100}
-              ],
-              duration: 10500,
-              easing: 'easeInQuad'
-          });
-        
+                {translateY: 500},
+                {opacity: 100},
+                {translateY: 0},
+            ],
+            duration: 1000,
+            easing: 'easeInQuad'
+        });
+
         anime({
-          targets: '.login-container > Button',
-          keyframes: [
-              {translateY: 500},
-              {opacity: 100},
-              {translateY: 0},
+            targets: '.login-container > button',
+            keyframes: [
+                {translateY: 500},
+                {opacity: 100},
+                {translateY: 0},
             ],
             duration: 1000,
             easing: 'easeInQuad'
@@ -75,6 +55,23 @@ const LogIn = () => {
     const [dispatch] = useStateValue();
 
     const signIn = () => {
+
+        let name = document.getElementById("user").value;
+        let password = document.getElementById("registerpwd").value;
+
+        // if(name === "123" && password === "456"){
+        //     window.location.href='/addOutfit';
+        // }
+
+        Axios.post("http://10.15.198.144:9000/login",{name: name,pwd: password})
+            .then(function (response) {
+            console.log(response);
+            history.push("/login");
+        })
+            .catch(function (error) {
+                console.log(error);
+                window.alert("Name or Password Error!");
+            });
 
         auth
         .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -96,16 +93,21 @@ const LogIn = () => {
     return(
         <div className="login">
 
-            <h2 id="title">WW</h2>
-            <p>Weather Wear Clothes</p>
+            <h2 id="title">Smart Wardrobe</h2>
 
-            <div className="login-container">
-            
+            <div className="login-container" >
+                <div className="userdiv">
+                    <input id="user" className="signinput"  type="text"  placeholder="Name" name="user"/>
+                </div>
+
+                <div className="pwddiv">
+                    <input id="registerpwd" className="signinput"  type="password" placeholder="Password" name="pwd"/>
+                </div>
                 {/* <h2><strong>Weather Wear Clothes</strong></h2> */}
                 {/* <img src={jean} alt="mann" height="200px" width="200px"/> */}
                 {/* <img src={sky} alt="mann" height="50px" width="30px"/> */}
                 <Button size="large" onClick={signIn} style={{opacity: 0}}>Sign In</Button>
-                {/* <div><img src={sunImg} alt="sun-icon" id="sun" /></div> */}
+                 {/*<div><img src={sunImg} alt="sun-icon" id="sun" /></div>*/}
                 {/* <div><img src={catImg} alt="model" id="model"  /></div> */}
 
             </div>
